@@ -1,0 +1,60 @@
+Student: BESLIU Andrei-Cornel
+Grupa: 311CD
+
+---== The Emperor's New Sudoku ==---
+
+< Alegere librarie parsare JSON - De ce cJSON?>
+
+  Pe langa motivul aproape evident de "hurr-durr era prima
+  optiune data de voi", am vrut sa folosesc acelasi parser
+  pe care l-au ales cei care au dezvoltat tema pentru a evita ORICE si
+  ABSOLUT ORICE mici diferente care ar fi putut aparea din cauza asta.
+
+  Chiar nu am vrut sa imi fac viata mai grea sa ma uit cu mare atentie in
+  hexdumpuri decat ca sa observ ca cJSON nu pune \n dupa ce printeaza obiectul
+  iar alt parser o face.
+
+  Moreover, am considerat ca cJSON este suficient de simplu de inteles si
+  puternic pentru a realiza ceea ce mi-a fost dat sa fac.
+
+
+< Task 1 >
+
+  Ca si reprezentari in memorie, am folosit o matrice 3D numita pixelMatrix,
+  contine 3 matrici 2D de marime 73x73.
+
+  O pozitie reprezinta valoarea pixelului de la pozitia respectiva iar
+  culorile sunt codificate 0 = blue, 1 = green, 2 = red. Exact aceiasi ordine
+  in care trebuie scrisi pixelii in formatul BMP.
+
+  Toate structurile de data importante / dimensiune notabila sunt
+  alocate dinamic in memorie.
+
+  Pentru citire scriu tot fisierul de input intr-un string folosind functia
+  readInputToString si apoi parsez cu cJSON folosind cJSON_Parse.
+
+  readInputToString() mai intai parcurge lungimea fisierului cu fseek()
+  pentru a afla cat de multa memorie sa aloc stringului (mai adaug un
+  caracter la lungime pentru a compensa pentru caracterul NULL).
+
+  Dupa aceia un simplu fgets() termina citirea.
+
+  Folosesc functiile ReadJSON<...> care extrag din obiectul cJSON
+  creat campurile care sunt stocate in structurile oferite in bmp_header.h iar
+  bitmapul etse pus in matricea descrisa mai sus. De notat ca deoarece
+  bitmapurile sunt scrise incepand cu ultimul rand de pixeli am ales
+  sa pun pixelii in matrice in aceiasi maniera, incepand cu ultima linie.
+
+  Functiile WriteInfoHeader / WriteFileHeader / WritePixels scriu in fisierul
+  de output campurile in ordinea necesara si respectand numarul de bytes
+  alocati fiecarui camp folosinf fwrite().
+
+  Pentru numele fisierului de output am creat o functie CreateFileName() care
+  extrage din numele fisierului de input numarul tablei de joc si il pune
+  in formatul dorit pentru numele fisierului de output. Functia este destul
+  de straight-forward.
+
+  De notat ca la afisare este necesara din nou afisarea matricii incepand cu
+  ultimul rand de pixeli de la stanga la dreapta pentru a respecta formatul.
+
+< Task 2 >
